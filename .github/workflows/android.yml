@@ -17,12 +17,15 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
+        working-directory: ./astra
         run: npm install
 
       - name: Build Web App
+        working-directory: ./astra
         run: npm run build
 
       - name: Sync Capacitor Android
+        working-directory: ./astra
         run: npx cap sync android
 
       - name: Setup Java JDK
@@ -32,10 +35,12 @@ jobs:
           java-version: '17'
 
       - name: Decode Keystore
+        working-directory: ./astra
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/astra-upload.jks
 
       - name: Build Signed APK
+        working-directory: ./astra
         run: |
           cd android
           chmod +x gradlew
@@ -49,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: android/app/build/outputs/apk/release/app-release.apk
+          path: astra/android/app/build/outputs/apk/release/app-release.apk
